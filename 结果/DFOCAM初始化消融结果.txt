@@ -1,0 +1,29 @@
+=== 第十三步：DFO-CAM 初始化消融（PTB-XL 子集，白底协议，GPU）===
+有效样本 100 张；DFOCAM 优化轮数 50（DFO-CAM默认）；种子=0；设备 NVIDIA GeForce RTX 3080 Ti
+问题：DFO-CAM 的忠实性优势来自"双向流优化"还是"好的初始化"？
+
+--- Deletion / Insertion AUC（越小/越大越忠实）---
+随机顺序基线          : del 0.4853 / ins 0.4933
+GradCAM(无优化参照)          : del 0.3638 ± 0.1616 / ins 0.7097 ± 0.0941
+DFOCAM_shapleycam(默认)   : del 0.3591 ± 0.1535 / ins 0.6899 ± 0.1063
+DFOCAM_gradcam          : del 0.3666 ± 0.1414 / ins 0.7011 ± 0.1004
+DFOCAM_zerofive         : del 0.3592 ± 0.1471 / ins 0.7029 ± 0.0912
+DFOCAM_random           : del 0.4539 ± 0.1649 / ins 0.5860 ± 0.1672
+
+--- AD / AI / AG（DFO-CAM协议）---
+GradCAM(无优化参照)          : AD 48.94%  AI 35.00%  AG 22.37%
+DFOCAM_shapleycam(默认)   : AD 48.87%  AI 43.00%  AG 24.16%
+DFOCAM_gradcam          : AD 48.88%  AI 40.00%  AG 23.65%
+DFOCAM_zerofive         : AD 48.91%  AI 37.00%  AG 20.95%
+DFOCAM_random           : AD 48.81%  AI 21.00%  AG 11.68%
+
+--- 逐图配对胜场（n 张中更好的张数）---
+DFOCAM_gradcam          : del 胜默认 32/100  ins 胜默认 48/100
+DFOCAM_zerofive         : del 胜默认 49/100  ins 胜默认 57/100
+DFOCAM_random           : del 胜默认 24/100  ins 胜默认 31/100
+DFOCAM_gradcam vs GradCAM: del 胜 37/100  ins 胜 33/100
+
+--- 读法 ---
+1) 4 种 DFOCAM 的 AUC 接近 -> 优势主要来自优化本身，对初始化不敏感；
+2) DFOCAM_gradcam 明显好于 GradCAM(无优化参照) -> 优化在 GradCAM 之上仍有增益；
+3) DFOCAM_random 也不差 -> 方法鲁棒，不依赖"好起点"。

@@ -1,0 +1,14 @@
+=== Grad-CAM vs DFO-CAM 忠实性对比（PTB-XL 子集 100 张，白底协议）===
+有效样本 100 张；底图=白色（第十一步诊断后的适配协议）
+
+--- Deletion / Insertion AUC（越小/越大越忠实）---
+随机顺序基线      : del 0.4936 / ins 0.4951
+GradCAM  按热力图 : del 0.3638 ± 0.1617 / ins 0.7097 ± 0.0949
+DFOCAM   按热力图 : del 0.3581 ± 0.1563 / ins 0.6886 ± 0.1098
+
+--- AD / AI / AG（DFO-CAM协议）---
+GradCAM  AD 48.93%  AI 35.00%  AG 22.35%
+DFOCAM   AD 48.88%  AI 42.00%  AG 23.85%
+
+结论（Deletion，越小越好）: GradCAM 0.3638 vs DFOCAM 0.3581 -> DFOCAM 更忠实
+结论（Insertion，越大越好）: GradCAM 0.7097 vs DFOCAM 0.6886 -> GradCAM 更忠实

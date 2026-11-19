@@ -1,0 +1,7 @@
+=== 第十七步：Chapman 忠实性（GradCAM Deletion/Insertion 白底协议）===
+有效样本 200 张（每类 100，白底 40 步）
+
+Deletion AUC（越小越忠实）: 按热力图 0.3966 ± 0.1395  vs  随机 0.4727
+Insertion AUC（越大越忠实）: 按热力图 0.7537 ± 0.0599  vs  随机 0.4830
+
+结论: Deletion 按热力图<随机（忠实）；Insertion 按热力图>随机（忠实）

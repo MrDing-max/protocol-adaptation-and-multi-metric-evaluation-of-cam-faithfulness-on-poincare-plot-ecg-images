@@ -1,0 +1,16 @@
+=== PTB-XL 忠实性指标（严格对齐DFO-CAM官方协议）===
+有效样本 597 张（跳过 0 张：logit 无变化）
+提取器 GradCAMElementWise，逐像素 40 步，logit 单图 min-max 归一后 AUC
+
+--- Deletion / Insertion AUC（平均 ± 标准差）---
+Deletion  按热力图: 0.3789 ± 0.2307   （越小越忠实）
+Deletion  随机顺序: 0.1782 ± 0.0785
+Insertion 按热力图: 0.5446 ± 0.2194   （越大越忠实）
+Insertion 随机顺序: 0.1775 ± 0.0767
+
+--- AD / AI / AG（DFO-CAM协议：保留 CAM>0.5 区域，GT 类）---
+AD  (Average Drop)    = 49.81%   越小越好
+AI  (Average Increase)= 38.36%   越大越好
+AG  (Average Gain)    = 24.96%   越大越好
+
+结论：Deletion 未优于随机 -> 需警惕；Insertion 优于随机 -> 热力图忠实

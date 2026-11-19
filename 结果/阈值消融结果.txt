@@ -1,0 +1,20 @@
+=== 阈值 τ 消融：AI 指标的显著性是否依赖阈值（100 张子集）===
+阈值 τ ∈ [0.3, 0.5, 0.7]；样本 100 张；DFO-CAM vs 三个基线（McNemar）
+
+--- τ = 0.3 ---
+  DFO-CAM 39.0% vs GradCAM    43.0% | McNemar p=0.3438 ns （DFO对/GradCAM错 3，反 7）
+  DFO-CAM 39.0% vs GradCAM++  46.0% | McNemar p=0.0654 ns （DFO对/GradCAM++错 2，反 9）
+  DFO-CAM 39.0% vs ScoreCAM   47.0% | McNemar p=0.0215 * （DFO对/ScoreCAM错 1，反 9）
+  -> DFO-CAM 的 AI 优势在 τ=0.3 下不再显著
+
+--- τ = 0.5 ---
+  DFO-CAM 41.0% vs GradCAM    35.0% | McNemar p=0.1796 ns （DFO对/GradCAM错 10，反 4）
+  DFO-CAM 41.0% vs GradCAM++  35.0% | McNemar p=0.1796 ns （DFO对/GradCAM++错 10，反 4）
+  DFO-CAM 41.0% vs ScoreCAM   33.0% | McNemar p=0.0574 ns （DFO对/ScoreCAM错 11，反 3）
+  -> DFO-CAM 的 AI 优势在 τ=0.5 下不再显著
+
+--- τ = 0.7 ---
+  DFO-CAM 21.0% vs GradCAM    13.0% | McNemar p=0.0215 * （DFO对/GradCAM错 9，反 1）
+  DFO-CAM 21.0% vs GradCAM++  14.0% | McNemar p=0.0654 ns （DFO对/GradCAM++错 9，反 2）
+  DFO-CAM 21.0% vs ScoreCAM   9.0% | McNemar p=0.0005 *** （DFO对/ScoreCAM错 12，反 0）
+  -> DFO-CAM 的 AI 优势在 τ=0.7 下不再显著

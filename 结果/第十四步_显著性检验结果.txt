@@ -1,0 +1,94 @@
+=== 第十四步：四方法忠实性对比 + 大样本显著性检验（PTB-XL 白底协议）===
+方法：GradCAM vs GradCAM++ vs ScoreCAM vs DFOCAM
+样本 300 张（正常/房颤各半，含第十二步的 100 张）；随机基线每张图 3 个随机顺序平均；模型在本子集准确率 97.7%
+检验：DFOCAM vs 每个基线，配对t检验 + Wilcoxon + Cohen's dz + Bootstrap 95%CI；AI 用 McNemar
+注意：每个指标 3 组对比，Bonferroni 校正后显著性阈值 α=0.05/3≈0.017
+
+--- 随机基线（3 种子平均）---
+随机顺序: del 0.4919±0.1411 / ins 0.4911±0.1391
+
+--- Deletion AUC（越小越忠实）：DFOCAM vs 各基线 ---
+【Deletion AUC（越小越忠实）】DFOCAM 0.3641±0.1643 vs GradCAM 0.3713±0.1687 -> 均值看 DFOCAM 更优
+   配对t检验  p=0.0479 * | Wilcoxon p=0.0737 ns
+   效应量 Cohen's dz=-0.115（|dz| 0.2小/0.5中/0.8大）| 平均差 95%CI [-0.0143, -0.0005]
+
+【Deletion AUC（越小越忠实）】DFOCAM 0.3641±0.1643 vs GradCAM++ 0.3713±0.1696 -> 均值看 DFOCAM 更优
+   配对t检验  p=0.0513 ns | Wilcoxon p=0.1045 ns
+   效应量 Cohen's dz=-0.113（|dz| 0.2小/0.5中/0.8大）| 平均差 95%CI [-0.0143, -0.0001]
+
+【Deletion AUC（越小越忠实）】DFOCAM 0.3641±0.1643 vs ScoreCAM 0.3683±0.1726 -> 均值看 DFOCAM 更优
+   配对t检验  p=0.2686 ns | Wilcoxon p=0.9517 ns
+   效应量 Cohen's dz=-0.064（|dz| 0.2小/0.5中/0.8大）| 平均差 95%CI [-0.0115, +0.0028]
+
+
+--- Insertion AUC（越大越忠实）：DFOCAM vs 各基线 ---
+【Insertion AUC（越大越忠实）】DFOCAM 0.6939±0.1026 vs GradCAM 0.7175±0.0848 -> 均值看 GradCAM 更优
+   配对t检验  p=0.0000 *** | Wilcoxon p=0.0000 ***
+   效应量 Cohen's dz=-0.278（|dz| 0.2小/0.5中/0.8大）| 平均差 95%CI [-0.0333, -0.0132]
+
+【Insertion AUC（越大越忠实）】DFOCAM 0.6939±0.1026 vs GradCAM++ 0.7197±0.0855 -> 均值看 GradCAM++ 更优
+   配对t检验  p=0.0000 *** | Wilcoxon p=0.0000 ***
+   效应量 Cohen's dz=-0.325（|dz| 0.2小/0.5中/0.8大）| 平均差 95%CI [-0.0351, -0.0165]
+
+【Insertion AUC（越大越忠实）】DFOCAM 0.6939±0.1026 vs ScoreCAM 0.7078±0.0905 -> 均值看 ScoreCAM 更优
+   配对t检验  p=0.0080 ** | Wilcoxon p=0.0347 *
+   效应量 Cohen's dz=-0.154（|dz| 0.2小/0.5中/0.8大）| 平均差 95%CI [-0.0243, -0.0033]
+
+
+--- AD %（越小越好）：DFOCAM vs 各基线 ---
+【AD %（越小越好）】DFOCAM 49.1586±49.8276 vs GradCAM 49.2580±49.9182 -> 均值看 DFOCAM 更优
+   配对t检验  p=0.0350 * | Wilcoxon p=0.0000 ***
+   效应量 Cohen's dz=-0.122（|dz| 0.2小/0.5中/0.8大）| 平均差 95%CI [-0.2034, -0.0373]
+
+【AD %（越小越好）】DFOCAM 49.1586±49.8276 vs GradCAM++ 49.2516±49.9125 -> 均值看 DFOCAM 更优
+   配对t检验  p=0.0201 * | Wilcoxon p=0.0000 ***
+   效应量 Cohen's dz=-0.135（|dz| 0.2小/0.5中/0.8大）| 平均差 95%CI [-0.1832, -0.0391]
+
+【AD %（越小越好）】DFOCAM 49.1586±49.8276 vs ScoreCAM 49.2362±49.8976 -> 均值看 DFOCAM 更优
+   配对t检验  p=0.0440 * | Wilcoxon p=0.0000 ***
+   效应量 Cohen's dz=-0.117（|dz| 0.2小/0.5中/0.8大）| 平均差 95%CI [-0.1676, -0.0217]
+
+
+--- AG %（越大越好）：DFOCAM vs 各基线 ---
+【AG %（越大越好）】DFOCAM 26.7384±34.2649 vs GradCAM 25.4275±36.2536 -> 均值看 DFOCAM 更优
+   配对t检验  p=0.2957 ns | Wilcoxon p=0.5339 ns
+   效应量 Cohen's dz=+0.060（|dz| 0.2小/0.5中/0.8大）| 平均差 95%CI [-1.1624, +3.7280]
+
+【AG %（越大越好）】DFOCAM 26.7384±34.2649 vs GradCAM++ 25.5592±36.3031 -> 均值看 DFOCAM 更优
+   配对t检验  p=0.3466 ns | Wilcoxon p=0.7628 ns
+   效应量 Cohen's dz=+0.054（|dz| 0.2小/0.5中/0.8大）| 平均差 95%CI [-1.2419, +3.5683]
+
+【AG %（越大越好）】DFOCAM 26.7384±34.2649 vs ScoreCAM 23.4709±34.6539 -> 均值看 DFOCAM 更优
+   配对t检验  p=0.0118 * | Wilcoxon p=0.0454 *
+   效应量 Cohen's dz=+0.146（|dz| 0.2小/0.5中/0.8大）| 平均差 95%CI [+0.7840, +5.7656]
+
+--- AI %：DFOCAM vs 各基线（McNemar）---
+【AI】DFOCAM 44.7% vs GradCAM 38.0%
+   McNemar：DFOCAM对/GradCAM错 23 张 vs DFOCAM错/GradCAM对 3 张 -> p=0.0001 ***
+【AI】DFOCAM 44.7% vs GradCAM++ 37.7%
+   McNemar：DFOCAM对/GradCAM++错 24 张 vs DFOCAM错/GradCAM++对 3 张 -> p=0.0000 ***
+【AI】DFOCAM 44.7% vs ScoreCAM 36.7%
+   McNemar：DFOCAM对/ScoreCAM错 26 张 vs DFOCAM错/ScoreCAM对 2 张 -> p=0.0000 ***
+
+--- 每种方法 vs 随机基线（验证"都显著优于瞎蒙"）---
+GradCAM del: 0.3713 vs 随机 0.4919 p=2.11e-53 *** dz=-1.10 -> 方向正确，显著优于随机
+GradCAM ins: 0.7175 vs 随机 0.4911 p=4.27e-73 *** dz=+1.41 -> 方向正确，显著优于随机
+GradCAM++ del: 0.3713 vs 随机 0.4919 p=6.62e-52 *** dz=-1.07 -> 方向正确，显著优于随机
+GradCAM++ ins: 0.7197 vs 随机 0.4911 p=2.94e-74 *** dz=+1.43 -> 方向正确，显著优于随机
+ScoreCAM del: 0.3683 vs 随机 0.4919 p=4.78e-53 *** dz=-1.09 -> 方向正确，显著优于随机
+ScoreCAM ins: 0.7078 vs 随机 0.4911 p=9.63e-73 *** dz=+1.40 -> 方向正确，显著优于随机
+DFOCAM del: 0.3641 vs 随机 0.4919 p=6.36e-62 *** dz=-1.23 -> 方向正确，显著优于随机
+DFOCAM ins: 0.6939 vs 随机 0.4911 p=1.29e-62 *** dz=+1.24 -> 方向正确，显著优于随机
+
+--- 正确性自检：与第十二步（100 张重合子集）已发表数字对照 ---
+重合子集 100 张：GradCAM del 0.364（十二步 0.364）/ ins 0.709（十二步 0.710）；DFOCAM del 0.360（十二步 0.358）/ ins 0.690（十二步 0.689）
+自检通过：与第十二步基本吻合，本次数据可信。
+
+--- 一句话结论（写论文可直接引用数字）---
+Deletion: DFOCAM 比 GradCAM 优 0.0072（p=4.79e-02 *）。
+Deletion: DFOCAM 比 GradCAM++ 优 0.0071（p=5.13e-02 ns）。
+Deletion: DFOCAM 比 ScoreCAM 优 0.0041（p=2.69e-01 ns）。
+Insertion: DFOCAM 比 GradCAM 劣 0.0236（p=2.33e-06 ***）。
+Insertion: DFOCAM 比 GradCAM++ 劣 0.0258（p=4.19e-08 ***）。
+Insertion: DFOCAM 比 ScoreCAM 劣 0.0140（p=8.03e-03 **）。
+解读：p<0.017（Bonferroni）且方向一致，可写"DFO-CAM 在该指标上显著优于全部基线方法"；若某对比 p 不显著且 |dz|<0.2，可写"与该基线相当（差异无统计学意义且效应量小）"。

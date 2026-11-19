@@ -1,0 +1,60 @@
+=== 第十四步补充：五方法忠实性对比（含 RISE，PTB-XL 白底协议）===
+方法：GradCAM vs GradCAM++ vs ScoreCAM vs DFOCAM vs RISE
+样本 300 张；随机基线同第十四步（3 顺序平均）；模型在本子集准确率 97.7%
+注意：DFOCAM vs 4 个基线，多重比较 Bonferroni 校正 α=0.05/4≈0.0125
+
+随机基线: del 0.4919±0.1411 / ins 0.4911±0.1391
+
+--- 5 方法均值汇总（表2 可直接引用）---
+方法         Deletion↓     Insertion↑    AD↓           AG↑           AI%↑
+GradCAM      0.3713±0.1687 0.7175±0.0848 49.26±49.92 25.43±36.25 38.0
+GradCAM++    0.3713±0.1696 0.7197±0.0855 49.25±49.91 25.56±36.30 37.7
+ScoreCAM     0.3683±0.1726 0.7078±0.0905 49.24±49.90 23.47±34.65 36.7
+DFOCAM       0.3641±0.1643 0.6939±0.1026 49.16±49.83 26.74±34.26 44.7
+RISE         0.3343±0.2263 0.6711±0.1484 47.55±48.85 0.60±6.05 2.7
+
+--- 每种方法 vs 随机基线（验证"都显著优于瞎蒙"）---
+GradCAM del: 0.3713 vs 随机 0.4919 p=2.11e-53 *** dz=-1.10 -> 显著优于随机
+GradCAM ins: 0.7175 vs 随机 0.4911 p=4.27e-73 *** dz=+1.41 -> 显著优于随机
+GradCAM++ del: 0.3713 vs 随机 0.4919 p=6.62e-52 *** dz=-1.07 -> 显著优于随机
+GradCAM++ ins: 0.7197 vs 随机 0.4911 p=2.94e-74 *** dz=+1.43 -> 显著优于随机
+ScoreCAM del: 0.3683 vs 随机 0.4919 p=4.78e-53 *** dz=-1.09 -> 显著优于随机
+ScoreCAM ins: 0.7078 vs 随机 0.4911 p=9.63e-73 *** dz=+1.40 -> 显著优于随机
+DFOCAM del: 0.3641 vs 随机 0.4919 p=6.36e-62 *** dz=-1.23 -> 显著优于随机
+DFOCAM ins: 0.6939 vs 随机 0.4911 p=1.29e-62 *** dz=+1.24 -> 显著优于随机
+RISE del: 0.3343 vs 随机 0.4919 p=2.14e-58 *** dz=-1.18 -> 显著优于随机
+RISE ins: 0.6711 vs 随机 0.4911 p=6.33e-26 *** dz=+0.67 -> 显著优于随机
+
+--- DFOCAM vs 各基线（含 RISE）逐指标 ---
+【Deletion（越小越忠实）】
+  DFOCAM 0.3641 vs GradCAM    0.3713 -> DFOCAM 更优 | t检验 p=0.0479 * | Wilcoxon p=0.0737 | dz=-0.115
+  DFOCAM 0.3641 vs GradCAM++  0.3713 -> DFOCAM 更优 | t检验 p=0.0513 ns | Wilcoxon p=0.1045 | dz=-0.113
+  DFOCAM 0.3641 vs ScoreCAM   0.3683 -> DFOCAM 更优 | t检验 p=0.2686 ns | Wilcoxon p=0.9517 | dz=-0.064
+  DFOCAM 0.3641 vs RISE       0.3343 -> RISE 更优 | t检验 p=0.0001 *** | Wilcoxon p=0.0000 | dz=+0.223
+【Insertion（越大越忠实）】
+  DFOCAM 0.6939 vs GradCAM    0.7175 -> GradCAM 更优 | t检验 p=0.0000 *** | Wilcoxon p=0.0000 | dz=-0.278
+  DFOCAM 0.6939 vs GradCAM++  0.7197 -> GradCAM++ 更优 | t检验 p=0.0000 *** | Wilcoxon p=0.0000 | dz=-0.325
+  DFOCAM 0.6939 vs ScoreCAM   0.7078 -> ScoreCAM 更优 | t检验 p=0.0080 ** | Wilcoxon p=0.0347 | dz=-0.154
+  DFOCAM 0.6939 vs RISE       0.6711 -> DFOCAM 更优 | t检验 p=0.0347 * | Wilcoxon p=0.0531 | dz=+0.122
+【AD（越小越好）】
+  DFOCAM 49.1586 vs GradCAM    49.2580 -> DFOCAM 更优 | t检验 p=0.0350 * | Wilcoxon p=0.0000 | dz=-0.122
+  DFOCAM 49.1586 vs GradCAM++  49.2516 -> DFOCAM 更优 | t检验 p=0.0201 * | Wilcoxon p=0.0000 | dz=-0.135
+  DFOCAM 49.1586 vs ScoreCAM   49.2362 -> DFOCAM 更优 | t检验 p=0.0440 * | Wilcoxon p=0.0000 | dz=-0.117
+  DFOCAM 49.1586 vs RISE       47.5477 -> RISE 更优 | t检验 p=0.0025 ** | Wilcoxon p=0.0000 | dz=+0.176
+【AG（越大越好）】
+  DFOCAM 26.7384 vs GradCAM    25.4275 -> DFOCAM 更优 | t检验 p=0.2957 ns | Wilcoxon p=0.5339 | dz=+0.060
+  DFOCAM 26.7384 vs GradCAM++  25.5592 -> DFOCAM 更优 | t检验 p=0.3466 ns | Wilcoxon p=0.7628 | dz=+0.054
+  DFOCAM 26.7384 vs ScoreCAM   23.4709 -> DFOCAM 更优 | t检验 p=0.0118 * | Wilcoxon p=0.0454 | dz=+0.146
+  DFOCAM 26.7384 vs RISE       0.6036 -> DFOCAM 更优 | t检验 p=0.0000 *** | Wilcoxon p=0.0000 | dz=+0.771
+
+--- AI %（McNemar，DFOCAM vs 各基线）---
+【AI】DFOCAM 44.7% vs GradCAM 38.0%
+   McNemar：DFOCAM对/GradCAM错 23 张 vs DFOCAM错/GradCAM对 3 张 -> p=0.0001 ***
+【AI】DFOCAM 44.7% vs GradCAM++ 37.7%
+   McNemar：DFOCAM对/GradCAM++错 24 张 vs DFOCAM错/GradCAM++对 3 张 -> p=0.0000 ***
+【AI】DFOCAM 44.7% vs ScoreCAM 36.7%
+   McNemar：DFOCAM对/ScoreCAM错 26 张 vs DFOCAM错/ScoreCAM对 2 张 -> p=0.0000 ***
+【AI】DFOCAM 44.7% vs RISE 2.7%
+   McNemar：DFOCAM对/RISE错 129 张 vs DFOCAM错/RISE对 3 张 -> p=0.0000 ***
+
+解读：看 RISE 是否也显著优于随机（若否则说明 RISE 在白底点阵图上忠实性不成立，需如实写）；看 DFOCAM 的 AI 优势对 RISE 是否仍成立（RISE 是黑盒机制，最能检验 DFOCAM 的 AI 优势是不是 CAM 家族内部现象）。

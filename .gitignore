@@ -1,0 +1,15 @@
+# datasets and trained weights
+data/
+模型/
+*.pth
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# local tooling and logs
+*.log
+.DS_Store
+Thumbs.db
